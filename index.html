@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Busquem els millors productes, amb les millors ressenyes i descomptes.">
+    <title>PretiumAI Shop | Top Ressenyes & Descomptes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; }
+        
+        .top-bar { background: #020617; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; flex-wrap: wrap; gap: 10px; }
+        .nav-actions { display: flex; align-items: center; gap: 5px; }
+        .suggestion-btn { background: linear-gradient(45deg, #ffd700, #ffaa00); color: #000; text-decoration: none; padding: 4px 10px; border-radius: 15px; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; margin-right: 10px; }
+        .lang-btn { background: none; border: 1px solid #334155; color: #94a3b8; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: bold; transition: 0.3s; }
+        .lang-btn:hover, .lang-btn.active { background: #00f2ff; color: #0f172a; border-color: #00f2ff; }
+        
+        .hero { text-align: center; padding: 50px 20px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); }
+        .logo-img { height: 200px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(0, 242, 255, 0.4)); }
+        .hero h1 { font-size: 2rem; color: #00f2ff; text-transform: uppercase; margin: 10px 0; }
+        .hero p { font-size: 1.1rem; color: #94a3b8; max-width: 700px; margin: 0 auto 30px; }
+
+        .search-container { position: relative; max-width: 600px; margin: 0 auto; display: flex; gap: 10px; }
+        .search-input { width: 100%; padding: 15px 25px; border-radius: 30px; border: 2px solid #334155; background: rgba(15, 23, 42, 0.9); color: #fff; font-size: 1rem; outline: none; }
+        .search-btn { background: #00f2ff; color: #0f172a; border: none; padding: 0 25px; border-radius: 30px; cursor: pointer; font-size: 1.2rem; }
+
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .card { background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; transition: transform 0.2s; position: relative; }
+        .card:hover { transform: translateY(-5px); border-color: #00f2ff; box-shadow: 0 5px 15px rgba(0, 242, 255, 0.1); }
+        .card-img { width: 100%; height: 200px; object-fit: contain; background: #fff; padding: 10px; box-sizing: border-box; }
+        .card-content { padding: 15px; }
+        
+        .badge-rating { position: absolute; top: 10px; left: 10px; background: #fbbf24; color: #000; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .badge-deal { position: absolute; top: 10px; right: 10px; background: #ef4444; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        .card-title { font-size: 0.95rem; margin: 10px 0; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .btn-buy { display: block; width: 100%; text-align: center; background: #00f2ff; color: #0f172a; padding: 10px; text-decoration: none; font-weight: bold; border-radius: 6px; margin-top: 10px; transition: 0.3s; }
+        .btn-buy:hover { background: #fff; }
+
+        footer { text-align: center; padding: 30px; border-top: 1px solid #334155; margin-top: 40px; color: #64748b; font-size: 0.8rem; }
+        .footer-links { margin-top: 10px; }
+        .footer-links a { color: #94a3b8; text-decoration: none; margin: 0 10px; transition: 0.3s; }
+        .footer-links a:hover { color: #00f2ff; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
+        .modal-content { background: #1e293b; margin: 15% auto; padding: 30px; border: 1px solid #00f2ff; width: 90%; max-width: 450px; border-radius: 15px; text-align: center; position: relative; }
+        .close { color: #aaa; position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; }
+        .btn-option { padding: 15px; border: none; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: white; margin-top: 15px; width: 100%; }
+        .btn-amazon { background: linear-gradient(45deg, #ff9900, #ff6600); }
+        .btn-ali { background: linear-gradient(45deg, #ff1a1a, #cc0000); }
+        .small-text { font-size: 0.75rem; opacity: 0.9; font-weight: normal; display: block; }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="suggeriments.html" class="suggestion-btn" id="btn-suggest"><i class="fas fa-lightbulb"></i> Suggereix!</a>
+        <div class="nav-actions">
+            <button class="lang-btn active" onclick="changeLang('cat')">CAT</button>
+            <button class="lang-btn" onclick="changeLang('es')">ESP</button>
+            <button class="lang-btn" onclick="changeLang('en')">ENG</button>
+            <button class="lang-btn" onclick="changeLang('fr')">FRA</button>
+            <button class="lang-btn" onclick="changeLang('it')">ITA</button>
+            <button class="lang-btn" onclick="changeLang('de')">DEU</button>
+        </div>
+    </div>
+
+    <div class="hero">
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <h1 id="hero-title">Els Productes Millor Valorats</h1>
+        <p id="hero-desc">La IA analitza milers de ressenyes per trobar el que realment val la pena.</p>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Busca productes top..." onkeypress="handleKeyPress(event)">
+            <button class="search-btn" onclick="cercarInteligent()"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.6/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 10% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Synology%20DiskStation%20DS224%2B%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=414" alt="Synology DiskStation DS224+" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Synology DiskStation DS224+</h3>
+                <a href="https://www.amazon.es/s?k=Synology%20DiskStation%20DS224%2B&tag=pretiumai-21" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.8/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 25% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Bicicleta%20El%C3%A9ctrica%20MTB%20Gravel%20XTR%2029%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=912" alt="Bicicleta Eléctrica MTB Gravel XTR 29" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Bicicleta Eléctrica MTB Gravel XTR 29</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DBicicleta%2520El%25C3%25A9ctrica%2520MTB%2520Gravel%2520XTR%252029" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.6/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 15% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/GORE%20WEAR%20C3%20Conjunto%20Maillot%20y%20Culotte%20Ciclismo%20Hombre%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=518" alt="GORE WEAR C3 Conjunto Maillot y Culotte Ciclismo Hombre" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">GORE WEAR C3 Conjunto Maillot y Culotte Ciclismo Hombre</h3>
+                <a href="https://www.amazon.es/s?k=GORE%20WEAR%20C3%20Conjunto%20Maillot%20y%20Culotte%20Ciclismo%20Hombre&tag=pretiumai-21" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.6/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 25% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Xiaomi%20Smart%20Band%208%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=33" alt="Xiaomi Smart Band 8" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Xiaomi Smart Band 8</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DXiaomi%2520Smart%2520Band%25208" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.9/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 25% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Proyector%20Port%C3%A1til%20Mini%20LED%20Android%2011%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=119" alt="Proyector Portátil Mini LED Android 11" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Proyector Portátil Mini LED Android 11</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DProyector%2520Port%25C3%25A1til%2520Mini%2520LED%2520Android%252011" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.9/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 25% Descuento + Envío Gratuito</span>
+            <img src="https://image.pollinations.ai/prompt/Funda%20Teclado%20Magn%C3%A9tico%20con%20Trackpad%20%20iPad%20Air%205%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=393" alt="Funda Teclado Magnético con Trackpad  iPad Air 5" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Funda Teclado Magnético con Trackpad  iPad Air 5</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DFunda%2520Teclado%2520Magn%25C3%25A9tico%2520con%2520Trackpad%2520%2520iPad%2520Air%25205" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.6/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 30% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/KODAK%20X130%20PRO%20SSD%20Externo%20Port%C3%A1til%201TB%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=232" alt="KODAK X130 PRO SSD Externo Portátil 1TB" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">KODAK X130 PRO SSD Externo Portátil 1TB</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DKODAK%2520X130%2520PRO%2520SSD%2520Externo%2520Port%25C3%25A1til%25201TB" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.8/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 20% de Descuento</span>
+            <img src="https://image.pollinations.ai/prompt/Blue%20Yeti%20-%20Micr%C3%B3fono%20USB%20%20streaming%20y%20podcasting%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=670" alt="Blue Yeti - Micrófono USB  streaming y podcasting" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Blue Yeti - Micrófono USB  streaming y podcasting</h3>
+                <a href="https://www.amazon.es/s?k=Blue%20Yeti%20-%20Micr%C3%B3fono%20USB%20%20streaming%20y%20podcasting&tag=pretiumai-21" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.9/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 15% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Elgato%20Facecam%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=303" alt="Elgato Facecam" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Elgato Facecam</h3>
+                <a href="https://www.amazon.es/s?k=Elgato%20Facecam&tag=pretiumai-21" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.7/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 15% Descuento con Cupón</span>
+            <img src="https://image.pollinations.ai/prompt/GTPLAYER%20Silla%20Gaming%20Ergon%C3%B3mica%20con%20Reposapi%C3%A9s%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=643" alt="GTPLAYER Silla Gaming Ergonómica con Reposapiés" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">GTPLAYER Silla Gaming Ergonómica con Reposapiés</h3>
+                <a href="https://www.amazon.es/s?k=GTPLAYER%20Silla%20Gaming%20Ergon%C3%B3mica%20con%20Reposapi%C3%A9s&tag=pretiumai-21" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.6/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 20% Descuento</span>
+            <img src="https://image.pollinations.ai/prompt/Anker%20Soundcore%20Mini%203%20Altavoz%20Bluetooth%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=358" alt="Anker Soundcore Mini 3 Altavoz Bluetooth" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Anker Soundcore Mini 3 Altavoz Bluetooth</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DAnker%2520Soundcore%2520Mini%25203%2520Altavoz%2520Bluetooth" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.8/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 25% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Fire%20HD%2010%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=991" alt="Fire HD 10" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Fire HD 10</h3>
+                <a href="https://www.amazon.es/s?k=Fire%20HD%2010&tag=pretiumai-21" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.5/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 50% Descuento + Envío Gratis</span>
+            <img src="https://image.pollinations.ai/prompt/UGREEN%20Nexode%20Cargador%20GaN%2065W%20USB%20C%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=255" alt="UGREEN Nexode Cargador GaN 65W USB C" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">UGREEN Nexode Cargador GaN 65W USB C</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DUGREEN%2520Nexode%2520Cargador%2520GaN%252065W%2520USB%2520C" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.8/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 25% de Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Govee%20Tiras%20LED%20Neon%20Flex%20RGBIC%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=8" alt="Govee Tiras LED Neon Flex RGBIC" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Govee Tiras LED Neon Flex RGBIC</h3>
+                <a href="https://www.amazon.es/s?k=Govee%20Tiras%20LED%20Neon%20Flex%20RGBIC&tag=pretiumai-21" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.9/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 25% de Descuento</span>
+            <img src="https://image.pollinations.ai/prompt/Brazo%20%20Monitor%20Ergon%C3%B3mico%20con%20Resorte%20%20Gas%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=811" alt="Brazo  Monitor Ergonómico con Resorte  Gas" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Brazo  Monitor Ergonómico con Resorte  Gas</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DBrazo%2520%2520Monitor%2520Ergon%25C3%25B3mico%2520con%2520Resorte%2520%2520Gas" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.8/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 40% OFF</span>
+            <img src="https://image.pollinations.ai/prompt/Mochila%20Impermeable%20Antirrobo%20USB%20%20Port%C3%A1til%2015.6%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=853" alt="Mochila Impermeable Antirrobo USB  Portátil 15.6" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Mochila Impermeable Antirrobo USB  Portátil 15.6</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DMochila%2520Impermeable%2520Antirrobo%2520USB%2520%2520Port%25C3%25A1til%252015.6" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.9/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 18% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Xiaomi%20Smart%20Band%208%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=271" alt="Xiaomi Smart Band 8" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Xiaomi Smart Band 8</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DXiaomi%2520Smart%2520Band%25208" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.9/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 20% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Sony%20WH-1000XM5%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=610" alt="Sony WH-1000XM5" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Sony WH-1000XM5</h3>
+                <a href="https://www.amazon.es/s?k=Sony%20WH-1000XM5&tag=pretiumai-21" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.9/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 15% Descompte</span>
+            <img src="https://image.pollinations.ai/prompt/Logitech%20G%20PRO%20X%20SUPERLIGHT%202%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=570" alt="Logitech G PRO X SUPERLIGHT 2" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Logitech G PRO X SUPERLIGHT 2</h3>
+                <a href="https://www.amazon.es/s?k=Logitech%20G%20PRO%20X%20SUPERLIGHT%202&tag=pretiumai-21" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <span class="badge-rating"><i class="fas fa-star"></i> 4.5/5</span>
+            <span class="badge-deal"><i class="fas fa-tag"></i> 25% OFF con Cupón de la Tienda</span>
+            <img src="https://image.pollinations.ai/prompt/Redragon%20K552%20KUMARA%20Teclado%20Mec%C3%A1nico%20Gaming%20TKL%20product%2C%20clean%20white%20background%2C%20high%20tech%2C%204k?width=400&height=400&nologo=true&seed=486" alt="Redragon K552 KUMARA Teclado Mecánico Gaming TKL" class="card-img" onerror="this.src='https://via.placeholder.com/300'">
+            <div class="card-content">
+                <h3 class="card-title">Redragon K552 KUMARA Teclado Mecánico Gaming TKL</h3>
+                <a href="https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=https%3A//www.aliexpress.com/wholesale%3FSearchText%3DRedragon%2520K552%2520KUMARA%2520Teclado%2520Mec%25C3%25A1nico%2520Gaming%2520TKL" target="_blank" class="btn-buy">VEURE OFERTA ➤</a>
+            </div>
+        </div>
+        
+    </div>
+
+    <footer>
+        <p>© 2025 PretiumAI Shop. Tecnologia IA.</p>
+        <div class="footer-links">
+            <a href="legal.html">Legal & Privacitat</a> | 
+            <a href="suggeriments.html">Suggeriments</a>
+        </div>
+    </footer>
+
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="tancarModal()">&times;</span>
+            <h2 id="modal-title">🔍 On vols buscar?</h2>
+            <p id="modal-term" style="color: #94a3b8; margin-bottom: 20px;"></p>
+            <button class="btn-option btn-amazon" onclick="anarBotiga('amazon')">
+                <i class="fab fa-amazon"></i> 
+                <div><span id="txt-amazon">Veure a Amazon</span> <span class="small-text">Enviament Ràpid</span></div>
+            </button>
+            <button class="btn-option btn-ali" onclick="anarBotiga('ali')">
+                <i class="fab fa-alipay"></i> 
+                <div><span id="txt-ali">Veure a AliExpress</span> <span class="small-text">Millor Preu</span></div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            'cat': { 'title': "Els Productes Millor Valorats", 'desc': "La IA analitza milers de ressenyes per trobar el que realment val la pena.", 'buy': "VEURE OFERTA ➤", 'placeholder': "Busca productes top...", 'modalTitle': "🔍 On vols buscar?", 'amazon': "Veure a Amazon", 'ali': "Veure a AliExpress", 'suggest': "Suggereix!" },
+            'es': { 'title': "Los Productos Mejor Valorados", 'desc': "La IA analiza miles de reseñas para encontrar lo que realmente vale la pena.", 'buy': "VER OFERTA ➤", 'placeholder': "Busca productos top...", 'modalTitle': "🔍 ¿Dónde buscar?", 'amazon': "Ver en Amazon", 'ali': "Ver en AliExpress", 'suggest': "¡Sugiere!" },
+            'en': { 'title': "Top Rated Products", 'desc': "AI analyzes thousands of reviews to find what's really worth it.", 'buy': "VIEW DEAL ➤", 'placeholder': "Search top products...", 'modalTitle': "🔍 Where to search?", 'amazon': "View on Amazon", 'ali': "View on AliExpress", 'suggest': "Suggest!" },
+            'fr': { 'title': "Produits les mieux notés", 'desc': "L'IA analyse des milliers d'avis pour trouver ce qui vaut la peine.", 'buy': "VOIR OFFRE ➤", 'placeholder': "Rechercher...", 'modalTitle': "🔍 Où chercher?", 'amazon': "Voir sur Amazon", 'ali': "Voir sur AliExpress", 'suggest': "Suggérer!" },
+            'it': { 'title': "I Prodotti Più Votati", 'desc': "L'IA analizza migliaia di recensioni per trovare ciò che vale davvero.", 'buy': "VEDI OFFERTA ➤", 'placeholder': "Cerca prodotti top...", 'modalTitle': "🔍 Dove cercare?", 'amazon': "Vedi su Amazon", 'ali': "Vedi su AliExpress", 'suggest': "Suggerisci!" },
+            'de': { 'title': "Am besten bewertete Produkte", 'desc': "KI analysiert Tausende von Bewertungen, um die besten Angebote zu finden.", 'buy': "ANGEBOT ANSEHEN ➤", 'placeholder': "Suche Top-Produkte...", 'modalTitle': "🔍 Wo suchen?", 'amazon': "Bei Amazon ansehen", 'ali': "Bei AliExpress ansehen", 'suggest': "Vorschlagen!" }
+        };
+
+        let currentLang = 'cat';
+        let searchTerm = "";
+
+        function changeLang(lang) {
+            const t = translations[lang];
+            document.getElementById('hero-title').innerText = t['title'];
+            document.getElementById('hero-desc').innerText = t['desc'];
+            document.getElementById('searchInput').placeholder = t['placeholder'];
+            document.getElementById('modal-title').innerText = t['modalTitle'];
+            document.getElementById('txt-amazon').innerText = t['amazon'];
+            document.getElementById('txt-ali').innerText = t['ali'];
+            document.getElementById('btn-suggest').innerHTML = '<i class="fas fa-lightbulb"></i> ' + t['suggest'];
+            document.querySelectorAll('.btn-buy').forEach(btn => btn.innerText = t['buy']);
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function handleKeyPress(e) { if(e.key === 'Enter') cercarInteligent(); }
+        
+        function cercarInteligent() {
+            const input = document.getElementById("searchInput");
+            if(input.value.trim() === "") return;
+            searchTerm = input.value.trim();
+            document.getElementById("modal-term").innerText = '"' + searchTerm + '"';
+            document.getElementById("searchModal").style.display = "block";
+        }
+
+        function tancarModal() { document.getElementById("searchModal").style.display = "none"; }
+
+        function anarBotiga(tienda) {
+            const term = encodeURIComponent(searchTerm);
+            let url = "";
+            if(tienda === 'amazon') {
+                url = `https://www.amazon.es/s?k=${term}&tag=pretiumai-21`;
+            } else {
+                const target = `https://www.aliexpress.com/wholesale?SearchText=${term}`;
+                url = `https://s.click.aliexpress.com/deep_link.htm?aff_short_key=_c3Okr3z3&dl_target_url=${encodeURIComponent(target)}`;
+            }
+            window.open(url, '_blank');
+            tancarModal();
+        }
+        
+        window.onclick = function(e) { if(e.target == document.getElementById("searchModal")) tancarModal(); }
+    </script>
+</body>
+</html>

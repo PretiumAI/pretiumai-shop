@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal & Privacy | PretiumAI Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', Roboto, sans-serif; line-height: 1.8; margin: 0; padding: 0; }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        
+        /* Botó Tornar */
+        .back-btn { display: inline-block; color: #00f2ff; text-decoration: none; font-weight: bold; margin-bottom: 20px; border: 1px solid #00f2ff; padding: 8px 16px; border-radius: 20px; transition: 0.3s; }
+        .back-btn:hover { background: #00f2ff; color: #000; }
+
+        /* Capçalera */
+        .header-legal { text-align: center; margin-bottom: 40px; border-bottom: 1px solid #1e293b; padding-bottom: 20px; }
+        h1 { color: #fff; font-size: 2.5rem; margin: 0 0 20px 0; text-transform: uppercase; }
+        
+        /* Botons Idioma Centrats i Grans */
+        .lang-container { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .lang-btn { background: #1e293b; border: 1px solid #334155; color: #94a3b8; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .lang-btn:hover, .lang-btn.active { background: #00f2ff; color: #000; border-color: #00f2ff; transform: translateY(-2px); }
+
+        /* Contingut */
+        .content-box { background: #1e293b; padding: 40px; border-radius: 12px; border: 1px solid #334155; }
+        h2 { color: #00f2ff; margin-top: 30px; border-bottom: 1px solid #334155; padding-bottom: 5px; font-size: 1.5rem; }
+        p { color: #cbd5e1; margin-bottom: 15px; text-align: justify; }
+        
+        footer { text-align: center; margin-top: 50px; color: #64748b; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-btn" id="btn-back">← Tornar a la Botiga</a>
+
+        <div class="header-legal">
+            <h1 id="main-title">TERMES LEGALS</h1>
+            <div class="lang-container">
+                <button class="lang-btn active" onclick="setLang('cat')">CAT</button>
+                <button class="lang-btn" onclick="setLang('es')">ESP</button>
+                <button class="lang-btn" onclick="setLang('en')">ENG</button>
+                <button class="lang-btn" onclick="setLang('fr')">FRA</button>
+                <button class="lang-btn" onclick="setLang('it')">ITA</button>
+                <button class="lang-btn" onclick="setLang('de')">DEU</button>
+            </div>
+        </div>
+
+        <div class="content-box">
+            <h2 id="h1">1. Identificació</h2>
+            <p id="p1">PretiumAI Shop és un projecte tecnològic de recomanació de productes basat en Intel·ligència Artificial. No som una botiga física, sinó un comparador digital.</p>
+
+            <h2 id="h2">2. Afiliació</h2>
+            <p id="p2">Important: Participem en programes d'afiliats (Amazon, AliExpress). Quan compres a través dels nostres enllaços, podem rebre una comissió sense cost extra per a tu.</p>
+
+            <h2 id="h3">3. Privacitat</h2>
+            <p id="p3">No guardem les teves dades de pagament ni personals. La compra es fa sempre a la web del venedor final de forma 100% segura.</p>
+
+            <h2 id="h4">4. Cookies</h2>
+            <p id="p4">Utilitzem cookies tècniques per recordar l'idioma i cookies de tercers per gestionar el correcte funcionament de l'afiliació.</p>
+
+            <h2 id="h5">5. Responsabilitat</h2>
+            <p id="p5">El preu vàlid és sempre el que marca la botiga final. La nostra IA intenta estar actualitzada, però els preus poden canviar.</p>
+        </div>
+
+        <footer>
+            <p>© 2025 PretiumAI Shop. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const texts = {
+            'cat': { title: "TERMES LEGALS", back: "← Tornar a la Botiga", h1: "1. Identificació", p1: "PretiumAI Shop és un projecte tecnològic de recomanació de productes basat en Intel·ligència Artificial. No som una botiga física, sinó un comparador digital.", h2: "2. Afiliació", p2: "Important: Participem en programes d'afiliats (Amazon, AliExpress). Quan compres a través dels nostres enllaços, podem rebre una comissió sense cost extra per a tu.", h3: "3. Privacitat", p3: "No guardem les teves dades de pagament ni personals. La compra es fa sempre a la web del venedor final de forma 100% segura.", h4: "4. Cookies", p4: "Utilitzem cookies tècniques per recordar l'idioma i cookies de tercers per gestionar el correcte funcionament de l'afiliació.", h5: "5. Responsabilitat", p5: "El preu vàlid és sempre el que marca la botiga final. La nostra IA intenta estar actualitzada, però els preus poden canviar." },
+            'es': { title: "TÉRMINOS LEGALES", back: "← Volver a la Tienda", h1: "1. Identificación", p1: "PretiumAI Shop es un proyecto tecnológico de recomendación basado en IA. No somos una tienda física, sino un comparador digital.", h2: "2. Afiliación", p2: "Importante: Participamos en programas de afiliados. Cuando compras a través de nuestros enlaces, podemos recibir una comisión sin coste extra para ti.", h3: "3. Privacidad", p3: "No guardamos tus datos de pago ni personales. La compra se realiza siempre en la web del vendedor final de forma 100% segura.", h4: "4. Cookies", p4: "Utilizamos cookies técnicas para recordar el idioma y cookies de terceros para gestionar la afiliación.", h5: "5. Responsabilidad", p5: "El precio válido es siempre el que marca la tienda final. Nuestra IA intenta estar actualizada, pero los precios pueden cambiar." },
+            'en': { title: "LEGAL TERMS", back: "← Back to Shop", h1: "1. Identification", p1: "PretiumAI Shop is an AI-based product recommendation project. We are not a physical store, but a digital comparator.", h2: "2. Affiliation", p2: "Important: We participate in affiliate programs. When you buy through our links, we may receive a commission at no extra cost to you.", h3: "3. Privacy", p3: "We do not store your payment or personal data. The purchase is always made on the final seller's website 100% securely.", h4: "4. Cookies", p4: "We use technical cookies to remember language settings and third-party cookies for affiliate management.", h5: "5. Disclaimer", p5: "The valid price is always the one on the final store. Our AI tries to be updated, but prices may change." },
+            'fr': { title: "MENTIONS LÉGALES", back: "← Retour Boutique", h1: "1. Identification", p1: "PretiumAI Shop est un projet de recommandation basé sur l'IA.", h2: "2. Affiliation", p2: "Nous participons à des programmes d'affiliation.", h3: "3. Confidentialité", p3: "Nous ne stockons pas vos données de paiement.", h4: "4. Cookies", p4: "Nous utilisons des cookies pour la langue et l'affiliation.", h5: "5. Responsabilité", p5: "Le prix valide est toujours celui du magasin final." },
+            'it': { title: "TERMINI LEGALI", back: "← Torna al Negozio", h1: "1. Identificazione", p1: "PretiumAI Shop è un progetto di raccomandazione basato sull'IA.", h2: "2. Affiliazione", p2: "Partecipiamo a programmi di affiliazione.", h3: "3. Privacy", p3: "Non conserviamo i tuoi dati di pagamento.", h4: "4. Cookies", p4: "Utilizziamo cookie per la lingua e l'affiliazione.", h5: "5. Responsabilità", p5: "Il prezzo valido è sempre quello del negozio finale." },
+            'de': { title: "IMPRESSUM", back: "← Zurück zum Shop", h1: "1. Impressum", p1: "PretiumAI Shop ist ein auf KI basierendes Empfehlungsprojekt.", h2: "2. Partnerschaft", p2: "Wir nehmen an Partnerprogrammen teil.", h3: "3. Datenschutz", p3: "Wir speichern keine Zahlungsdaten.", h4: "4. Cookies", p4: "Wir verwenden Cookies für Sprache und Partnerprogramme.", h5: "5. Haftung", p5: "Der gültige Preis ist immer der im Endgeschäft angezeigte." }
+        };
+
+        function setLang(lang) {
+            const t = texts[lang];
+            if (!t) return;
+            document.getElementById('main-title').innerText = t.title;
+            document.getElementById('btn-back').innerText = t.back;
+            document.getElementById('h1').innerText = t.h1; document.getElementById('p1').innerText = t.p1;
+            document.getElementById('h2').innerText = t.h2; document.getElementById('p2').innerText = t.p2;
+            document.getElementById('h3').innerText = t.h3; document.getElementById('p3').innerText = t.p3;
+            document.getElementById('h4').innerText = t.h4; document.getElementById('p4').innerText = t.p4;
+            document.getElementById('h5').innerText = t.h5; document.getElementById('p5').innerText = t.p5;
+
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
