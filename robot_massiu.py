@@ -25,24 +25,24 @@ except Exception as e:
 
 # CONFIGURACIÓ DE TEMPS (AUGMENTAT PER EVITAR EL BAN 429)
 MIN_WAIT = 20 
-MAX_WAIT = 60
+MAX_WAIT = 40
 
 # ⚠️ ESTRATÈGIA: El 1.5 és el que té més quota gratuïta. El posem primer.
-MODELS_RODA = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash-exp", "gemini-2.0-flash-001", "gemini-2.0-flash-lite", "gemini-2.0-flash-lite-preview-02-05", "gemini-2.0-flash-lite-preview", "gemini-exp-1206", "gemini-2.5-flash-preview-tts", "gemma-3-1b-it", "gemma-3-4b-it", "gemma-3-12b-it", "gemma-3-27b-it", "gemma-3n-e4b-it", "gemma-3n-e2b-it", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-2.5-flash-preview-09-2025", "gemini-2.5-flash-lite-preview-09-2025", "gemini-3-pro-preview", "gemini-3-flash-preview", "gemini-robotics-er-1.5-preview", "gemini-2.5-computer-use-preview-10-2025"]
+MODELS_RODA = ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash-exp", "gemma-3-4b-it", "gemma-3-12b-it", "gemma-3-27b-it", "gemma-3n-e4b-it", "gemma-3n-e2b-it", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-2.5-flash-preview-09-2025", "gemini-2.5-flash-lite-preview-09-2025", "gemini-3-pro-preview", "gemini-3-flash-preview", "gemini-robotics-er-1.5-preview", "gemini-2.5-computer-use-preview-10-2025"]
 CATEGORIES = [
-    "robot limpieza", "pantallas ordenador 29 pulgadas", "Juguetes de madera para niños",
-    "aspirador sin cable", "Ratones gaming ligeros", 
-    "Auriculares inalámbricos cancelación ruido", "Relojes inteligentes calidad precio",
+    "robot limpieza", "pantallas ordenador 29 pulgadas", "robot segadora",
+    "aspirador sin cable", "cafetera de viaje", "frigorificos camper",
+    "Auriculares inalámbricos cancelación ruido", "Relojes inteligentes calidad ",
     "Mochilas para portátil impermeables", "Soportes monitor brazo gas",
     "Tiras LED neón flexibles", "Cargadores rápidos GaN 65W",
-    "Tablets baratas para estudiar", "Altavoces bluetooth potentes pequeños",
-    "Sillas gaming ergonómicas baratas", "Webcams streaming 1080p 60fps",
+    "Tablets profesionales", "Altavoces bluetooth potentes",
+    "Sillas gaming ergonómicas", "Webcams streaming 1080p 60fps",
     "Microfonos USB para podcast", "Discos duros SSD externos 1TB",
-    "Hubs USB-C para Macbook", "Fundas teclado iPad con trackpad",
-    "Proyectores portátiles mini", "Pulseras de actividad deportivas",
-    "Ropa ciclismo maillot culotte", "Cafeteras express", 
-    "Sistemas almacenamiento NAS", "Discos duros server 4TB 8TB",
-    "Impresoras 3D ", "Drones con camara 8k", "Smart Home enchufes wifi"
+    "Hubs USB-C para Macbook", "Fundas teclado iPad con trackpad", "productos dyson similar",
+    "Proyectores 4k 8k", "Pulseras de actividad deportivas", "estacion energia portatil",
+    "Ropa ciclismo maillot culotte", "Cafeteras express", "exoesqueleto",
+    "Sistemas almacenamiento NAS", "Discos duros server 4TB 8TB 16TB 24TB 32TB",
+    "Impresoras 3D ", "Drones con camara 8k", "Smart Home", " DOMOTICA", "ANILLO ACTIVIDAD DEPOTIVA"
 ]
 
 FITXER_CSV = "base_dades_final.csv"
