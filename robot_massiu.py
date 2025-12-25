@@ -2,10 +2,10 @@ import pandas as pd
 import time
 import random
 import os
-import requests
 import json
 import urllib.parse
 from datetime import datetime
+import google.generativeai as genai  # <--- FEM SERVIR LA LLIBRERIA OFICIAL
 
 # ==============================================================================
 # 🔑 ZONA DE CONFIGURACIÓ
@@ -14,11 +14,15 @@ GOOGLE_API_KEY = "AIzaSyCrmQkasklZvkrp73J0JNwVJKXWIyvqYIs"
 AMAZON_TAG = "pretiumai-21"
 ALI_CODE = "_c3Okr3z3" 
 
-# CONFIGURACIÓ 
+# Configurem la clau oficialment
+genai.configure(api_key=GOOGLE_API_KEY)
+
+# CONFIGURACIÓ DE TEMPS
 MIN_WAIT = 5 
 MAX_WAIT = 15
-# Hem posat el 2.0 i el 1.5. Si un falla, l'altre respondrà.
-MODELS_RODA = ["gemini-2.0-flash", "gemini-1.5-flash"]
+
+# LLISTA DE MODELS (Prioritzem el 1.5 que és roca sòlida, després els nous)
+MODELS_RODA = ["gemini-1.5-flash", "gemini-2.0-flash-exp", "gemini-2.0-flash"]
 
 CATEGORIES = [
     "Cafeteras italianas rojas", "Juguetes de madera para niños",
@@ -211,11 +215,17 @@ def carregar_base_dades():
 
 def guardar_producte(producte):
     df = carregar_base_dades()
+    # Filtre de duplicats: Si el producte ja existeix, no el tornem a guardar
+    if not df.empty and producte['Nom Producte'] in df['Nom Producte'].values:
+        print(f"   ⚠️ Duplicat ignorat: {producte['Nom Producte'][:20]}...")
+        return False
+
     nou_df = pd.DataFrame([producte])
     if "Rating" not in df.columns: df["Rating"] = "4.5"
     df = pd.concat([df, nou_df], ignore_index=True)
     df.to_csv(FITXER_CSV, index=False)
     print(f"   💾 [{datetime.now().strftime('%H:%M')}] Guardat: {producte['Nom Producte'][:30]}... ({producte['Tienda']})")
+    return True
 
 def netejar_text(text):
     brossa = ["Aquí tienes", "Aquí tens", "Here is", "una propuesta", "un producto", "realista", "top ventas", "para", "de", "en la categoría", ":"]
@@ -234,27 +244,18 @@ def generar_oferta_multi_model(categoria):
     tienda = "Amazon" if es_amazon else "AliExpress"
     prompt = f"ACTUA COM UNA API JSON. NO SALUDIS. NO EXPLIQUIS. Retorna només: NOM_PRODUCTE | OFERTA_CLAU. Exemple: iPhone 15 Pro | 15% Descompte. Genera un producte real de {tienda} per: {categoria}"
     
-    headers = {'Content-Type': 'application/json'}
-    data = {"contents": [{"parts": [{"text": prompt}]}]}
-
-    for model in MODELS_RODA:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GOOGLE_API_KEY}"
+    for model_name in MODELS_RODA:
         try:
-            # Posa una pausa per no saturar
-            time.sleep(2)
-            res = requests.post(url, headers=headers, json=data)
+            # Utilitzem la llibreria oficial de Google
+            model = genai.GenerativeModel(model_name)
             
-            # --- ZONA DEBUG (XIVATO) ---
-            if res.status_code != 200:
-                print(f"⚠️ Error al model {model}: {res.status_code}")
-                # Si falla, salta al següent model de la llista
-                continue 
+            # Fem la petició
+            response = model.generate_content(prompt)
             
-            # Si estem aquí, ha funcionat (codi 200)
-            text_brut = res.json()['candidates'][0]['content']['parts'][0]['text'].strip()
+            # Obtenim el text
+            text_brut = response.text.strip()
             
-            # Imprimim què ens diu Google per veure si es queixa
-            print(f"🤖 El cervell {model} diu: {text_brut[:40]}...")
+            print(f"   🤖 {model_name} ha respost: {text_brut[:40]}...")
 
             linia_bona = ""
             for linia in text_brut.split("\n"):
@@ -281,8 +282,10 @@ def generar_oferta_multi_model(categoria):
 
                 return {"Nom Producte": nom, "Dada Clau": clau, "Enllac Compra": link, "Imatge": img, "Valid": "Si", "Tienda": tienda, "Rating": rating}
         except Exception as e:
-            print(f"❌ Error tècnic amb {model}: {e}")
+            # Si falla un model, provem el següent sense fer drama
+            # print(f"   ⚠️ El model {model_name} ha fallat, provant el següent...")
             continue
+            
     return None
 
 def regenerar_web():
@@ -313,14 +316,13 @@ def regenerar_web():
         f.write(html_final)
     
     try:
-        # Aquesta part es per si tenim Git actiu, sino no fara res dolent
         print("   ☁️ Intentant actualitzar núvol...")
         os.system("git add .")
         os.system('git commit -m "Neteja i update"')
         os.system("git push")
     except: pass
 
-print("🧹 ROBOT V10 (NADAL FIX): Regenerant web...")
+print("🧹 ROBOT V11 (OFFICIAL LIBRARY): Regenerant web...")
 regenerar_web()
 print("✅ Web regenerada amb Èxit!")
 print("🦉 Iniciant torn de vigilància...")
@@ -330,10 +332,11 @@ while True:
         print(f"\n[{datetime.now().strftime('%H:%M:%S')}] 🔎 {cat}...")
         oferta = generar_oferta_multi_model(cat)
         if oferta: 
-            guardar_producte(oferta)
-            regenerar_web()
+            guardat = guardar_producte(oferta)
+            if guardat:
+                regenerar_web()
         else:
-            print("⚠️ No s'ha trobat cap oferta vàlida.")
+            print("⚠️ Cap model ha pogut generar una oferta vàlida.")
         
         temps_espera = random.randint(MIN_WAIT, MAX_WAIT)
         print(f"⏳ Esperant {temps_espera} segons...")
