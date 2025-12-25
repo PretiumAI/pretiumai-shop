@@ -8,10 +8,11 @@ from datetime import datetime
 import google.generativeai as genai
 
 # ==============================================================================
-# 🔑 ZONA DE CONFIGURACIÓ (POSA LA NOVA CLAU AQUÍ)
+# 🔑 ZONA DE CONFIGURACIÓ
 # ==============================================================================
+# 👇👇👇 POSA LA TEVA CLAU NOVA AQUÍ 👇👇👇
 GOOGLE_API_KEY = "AIzaSyAjwqI8jm_f-jIVwsQcDIrX0F_rXE306Tg" 
-# 👆👆👆 RECORDA: Esborra el text i posa la clau AIza...
+# 👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆
 
 AMAZON_TAG = "pretiumai-21"
 ALI_CODE = "_c3Okr3z3" 
@@ -22,16 +23,14 @@ try:
 except Exception as e:
     print(f"❌ Error configurant la clau: {e}")
 
-# CONFIGURACIÓ
-MIN_WAIT = 100 
+# CONFIGURACIÓ DE TEMPS (AUGMENTAT PER EVITAR EL BAN 429)
+MIN_WAIT = 120 
 MAX_WAIT = 300
 
-# ⚠️ LLISTA ACTUALITZADA SEGONS EL TEU TEST (Models 2025)
-# Fem servir els que sabem segur que tens disponibles
-MODELS_RODA = ["gemini-2.0-flash", "gemini-2.5-flash","gemini-2.5-pro","gemini-2.0-flash-exp","gemini-2.0-flash-001","gemini-2.0-flash-lite-001","gemini-2.0-flash-lite","gemini-2.0-flash-lite-preview-02-05","gemini-2.0-flash-lite-preview","gemini-exp-1206","gemini-2.5-flash-preview-tts","gemini-2.5-pro-preview-tts","gemini-2.5-pro-preview-tts","gemma-3-1b-it","gemma-3-4b-it","gemma-3-12b-it","gemma-3-27b-it","gemma-3n-e4b-it","gemma-3n-e2b-it","gemini-flash-latest","gemini-flash-lite-latest","gemini-pro-latest","gemini-2.5-flash-lite","gemini-2.5-flash-image","gemini-2.5-flash-preview-09-2025","gemini-2.5-flash-lite-preview-09-2025","gemini-3-pro-preview","gemini-3-flash-preview","gemini-3-pro-image-preview"]
-
+# ⚠️ ESTRATÈGIA: El 1.5 és el que té més quota gratuïta. El posem primer.
+MODELS_RODA = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash-exp", "gemini-2.0-flash-001", "gemini-2.0-flash-lite", "gemini-2.0-flash-lite-preview-02-05", "gemini-2.0-flash-lite-preview", "gemini-exp-1206", "gemini-2.5-flash-preview-tts", "gemma-3-1b-it", "gemma-3-4b-it", "gemma-3-12b-it", "gemma-3-27b-it", "gemma-3n-e4b-it", "gemma-3n-e2b-it", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-2.5-flash-preview-09-2025", "gemini-2.5-flash-lite-preview-09-2025", "gemini-3-pro-preview", "gemini-3-flash-preview", "gemini-robotics-er-1.5-preview", "gemini-2.5-computer-use-preview-10-2025"]
 CATEGORIES = [
-    "Cafeteras italianas rojas", "Juguetes de madera para niños",
+    "Cafeteras express", "Juguetes de madera para niños",
     "Teclados mecánicos gaming", "Ratones gaming ligeros", 
     "Auriculares inalámbricos cancelación ruido", "Relojes inteligentes calidad precio",
     "Mochilas para portátil impermeables", "Soportes monitor brazo gas",
@@ -103,11 +102,9 @@ def generar_oferta_multi_model(categoria):
             response = model.generate_content(prompt)
             
             if not response.text:
-                print(f"   ❌ {model_name}: Resposta buida.")
                 continue
                 
             text_brut = response.text.strip()
-            
             linia_bona = ""
             for linia in text_brut.split("\n"):
                 if "|" in linia:
@@ -118,14 +115,18 @@ def generar_oferta_multi_model(categoria):
                 parts = linia_bona.split("|")
                 nom = netejar_text(parts[0]) 
                 clau = parts[1].strip()
-                
                 nom_safe = urllib.parse.quote(nom)
                 link = f"https://www.amazon.es/s?k={nom_safe}&tag={AMAZON_TAG}" if es_amazon else f"https://s.click.aliexpress.com/deep_link.htm?aff_short_key={ALI_CODE}&dl_target_url={urllib.parse.quote(f'https://www.aliexpress.com/wholesale?SearchText={nom_safe}')}"
                 img = f"https://image.pollinations.ai/prompt/{urllib.parse.quote(nom)}?width=400&height=400&nologo=true"
-                
                 return {"Nom Producte": nom, "Dada Clau": clau, "Enllac Compra": link, "Imatge": img, "Valid": "Si", "Tienda": tienda, "Rating": 4.8}
+        
         except Exception as e:
-            print(f"   🔥 ERROR {model_name}: {e}")
+            # SISTEMA ANTIBLOQUEIG 429
+            if "429" in str(e):
+                print(f"   🛑 QUOTA EXCEDIDA al model {model_name}. Dormint 60 segons...")
+                time.sleep(60) 
+            else:
+                print(f"   ⚠️ Error lleu {model_name}: {e}")
             continue
             
     return None
@@ -142,7 +143,7 @@ def regenerar_web():
         os.system("git push >nul 2>&1")
     except: pass
 
-print("🕵️‍♂️ ROBOT V14 (MODELS ACTUALITZATS 2.0/2.5)...")
+print("🕵️‍♂️ ROBOT V15 (MODE ECONOMY & ANTIBLOQUEIG)...")
 while True:
     for cat in CATEGORIES:
         print(f"\n🔎 Buscant: {cat}...")
@@ -150,5 +151,8 @@ while True:
         if oferta: 
             if guardar_producte(oferta): regenerar_web()
         else:
-            print("⚠️ Cap model ha pogut generar una oferta (Revisa la clau API).")
-        time.sleep(random.randint(MIN_WAIT, MAX_WAIT))
+            print("⚠️ No s'ha trobat oferta (Possible filtre o error).")
+        
+        t = random.randint(MIN_WAIT, MAX_WAIT)
+        print(f"⏳ Descansant {t} segons per recuperar forces...")
+        time.sleep(t)
