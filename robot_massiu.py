@@ -20,6 +20,7 @@ MAX_WAIT = 30
 MODELS_RODA = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest"]
 
 CATEGORIES = [
+    "Cafeteras italianas rojas", "Juguetes de madera para niños",
     "Teclados mecánicos gaming", "Ratones gaming ligeros", 
     "Auriculares inalámbricos cancelación ruido", "Relojes inteligentes calidad precio",
     "Mochilas para portátil impermeables", "Soportes monitor brazo gas",
