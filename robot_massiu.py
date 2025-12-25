@@ -30,8 +30,8 @@ MAX_WAIT = 300
 # ⚠️ ESTRATÈGIA: El 1.5 és el que té més quota gratuïta. El posem primer.
 MODELS_RODA = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash-exp", "gemini-2.0-flash-001", "gemini-2.0-flash-lite", "gemini-2.0-flash-lite-preview-02-05", "gemini-2.0-flash-lite-preview", "gemini-exp-1206", "gemini-2.5-flash-preview-tts", "gemma-3-1b-it", "gemma-3-4b-it", "gemma-3-12b-it", "gemma-3-27b-it", "gemma-3n-e4b-it", "gemma-3n-e2b-it", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-2.5-flash-preview-09-2025", "gemini-2.5-flash-lite-preview-09-2025", "gemini-3-pro-preview", "gemini-3-flash-preview", "gemini-robotics-er-1.5-preview", "gemini-2.5-computer-use-preview-10-2025"]
 CATEGORIES = [
-    "Cafeteras express", "Juguetes de madera para niños",
-    "Teclados mecánicos gaming", "Ratones gaming ligeros", 
+    "robot limpieza", "pantallas ordenador 29 pulgadas", "Juguetes de madera para niños",
+    "aspirador sin cable", "Ratones gaming ligeros", 
     "Auriculares inalámbricos cancelación ruido", "Relojes inteligentes calidad precio",
     "Mochilas para portátil impermeables", "Soportes monitor brazo gas",
     "Tiras LED neón flexibles", "Cargadores rápidos GaN 65W",
@@ -40,9 +40,9 @@ CATEGORIES = [
     "Microfonos USB para podcast", "Discos duros SSD externos 1TB",
     "Hubs USB-C para Macbook", "Fundas teclado iPad con trackpad",
     "Proyectores portátiles mini", "Pulseras de actividad deportivas",
-    "Ropa ciclismo maillot culotte", "Bicicletas electricas mtb gravel", 
+    "Ropa ciclismo maillot culotte", "Cafeteras express", 
     "Sistemas almacenamiento NAS", "Discos duros server 4TB 8TB",
-    "Impresoras 3D baratas", "Drones con camara 8k", "Smart Home enchufes wifi"
+    "Impresoras 3D ", "Drones con camara 8k", "Smart Home enchufes wifi"
 ]
 
 FITXER_CSV = "base_dades_final.csv"
