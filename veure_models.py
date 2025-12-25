@@ -1,7 +1,7 @@
 import google.generativeai as genai
 
 # --- POSA LA TEVA CLAU AQUÍ ---
-CLAU_SECRETA = "AIzaSyCrmQkasklZvkrp73J0JNwVJKXWIyvqYIs" 
+CLAU_SECRETA = "AIzaSyAjwqI8jm_f-jIVwsQcDIrX0F_rXE306Tg" 
 # ------------------------------
 
 genai.configure(api_key=CLAU_SECRETA)
