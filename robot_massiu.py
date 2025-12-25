@@ -20,7 +20,7 @@ MAX_WAIT = 400
 MODELS_RODA = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest"]
 
 CATEGORIES = [
-    "Teclados mecánicos gaming baratos", "Ratones gaming ligeros", 
+    "Teclados mecánicos gaming", "Ratones gaming ligeros", 
     "Auriculares inalámbricos cancelación ruido", "Relojes inteligentes calidad precio",
     "Mochilas para portátil impermeables", "Soportes monitor brazo gas",
     "Tiras LED neón flexibles", "Cargadores rápidos GaN 65W",
@@ -31,7 +31,7 @@ CATEGORIES = [
     "Proyectores portátiles mini", "Pulseras de actividad deportivas",
     "Ropa ciclismo maillot culotte", "Bicicletas electricas mtb gravel", 
     "Sistemas almacenamiento NAS", "Discos duros server 4TB 8TB",
-    "Impresoras 3D baratas", "Drones con camara 4k", "Smart Home enchufes wifi"
+    "Impresoras 3D baratas", "Drones con camara 8k", "Smart Home enchufes wifi"
 ]
 
 FITXER_CSV = "base_dades_final.csv"
