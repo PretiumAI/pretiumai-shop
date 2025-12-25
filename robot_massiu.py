@@ -23,12 +23,12 @@ except Exception as e:
     print(f"❌ Error configurant la clau: {e}")
 
 # CONFIGURACIÓ
-MIN_WAIT = 5 
-MAX_WAIT = 10
+MIN_WAIT = 100 
+MAX_WAIT = 300
 
 # ⚠️ LLISTA ACTUALITZADA SEGONS EL TEU TEST (Models 2025)
 # Fem servir els que sabem segur que tens disponibles
-MODELS_RODA = ["gemini-2.0-flash", "gemini-2.5-flash"]
+MODELS_RODA = ["gemini-2.0-flash", "gemini-2.5-flash","gemini-2.5-pro","gemini-2.0-flash-exp","gemini-2.0-flash-001","gemini-2.0-flash-lite-001","gemini-2.0-flash-lite","gemini-2.0-flash-lite-preview-02-05","gemini-2.0-flash-lite-preview","gemini-exp-1206","gemini-2.5-flash-preview-tts","gemini-2.5-pro-preview-tts","gemini-2.5-pro-preview-tts","gemma-3-1b-it","gemma-3-4b-it","gemma-3-12b-it","gemma-3-27b-it","gemma-3n-e4b-it","gemma-3n-e2b-it","gemini-flash-latest","gemini-flash-lite-latest","gemini-pro-latest","gemini-2.5-flash-lite","gemini-2.5-flash-image","gemini-2.5-flash-preview-09-2025","gemini-2.5-flash-lite-preview-09-2025","gemini-3-pro-preview","gemini-3-flash-preview","gemini-3-pro-image-preview"]
 
 CATEGORIES = [
     "Cafeteras italianas rojas", "Juguetes de madera para niños",
