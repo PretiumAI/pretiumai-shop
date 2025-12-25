@@ -24,8 +24,8 @@ except Exception as e:
     print(f"❌ Error configurant la clau: {e}")
 
 # CONFIGURACIÓ DE TEMPS (AUGMENTAT PER EVITAR EL BAN 429)
-MIN_WAIT = 120 
-MAX_WAIT = 300
+MIN_WAIT = 20 
+MAX_WAIT = 60
 
 # ⚠️ ESTRATÈGIA: El 1.5 és el que té més quota gratuïta. El posem primer.
 MODELS_RODA = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash-exp", "gemini-2.0-flash-001", "gemini-2.0-flash-lite", "gemini-2.0-flash-lite-preview-02-05", "gemini-2.0-flash-lite-preview", "gemini-exp-1206", "gemini-2.5-flash-preview-tts", "gemma-3-1b-it", "gemma-3-4b-it", "gemma-3-12b-it", "gemma-3-27b-it", "gemma-3n-e4b-it", "gemma-3n-e2b-it", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-2.5-flash-preview-09-2025", "gemini-2.5-flash-lite-preview-09-2025", "gemini-3-pro-preview", "gemini-3-flash-preview", "gemini-robotics-er-1.5-preview", "gemini-2.5-computer-use-preview-10-2025"]
