@@ -15,8 +15,8 @@ AMAZON_TAG = "pretiumai-21"
 ALI_CODE = "_c3Okr3z3" 
 
 # CONFIGURACIÓ 
-MIN_WAIT = 180 
-MAX_WAIT = 400
+MIN_WAIT = 10 
+MAX_WAIT = 30
 MODELS_RODA = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest"]
 
 CATEGORIES = [
