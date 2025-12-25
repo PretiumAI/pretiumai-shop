@@ -15,9 +15,10 @@ AMAZON_TAG = "pretiumai-21"
 ALI_CODE = "_c3Okr3z3" 
 
 # CONFIGURACIÓ 
-MIN_WAIT = 10 
-MAX_WAIT = 30
-MODELS_RODA = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest"]
+MIN_WAIT = 5 
+MAX_WAIT = 15
+# Hem posat el 2.0 i el 1.5. Si un falla, l'altre respondrà.
+MODELS_RODA = ["gemini-2.0-flash", "gemini-1.5-flash"]
 
 CATEGORIES = [
     "Cafeteras italianas rojas", "Juguetes de madera para niños",
@@ -38,7 +39,7 @@ CATEGORIES = [
 FITXER_CSV = "base_dades_final.csv"
 
 # ==============================================================================
-# 🎨 PLANTILLA HTML "CAVIAR" (CORREGIDA)
+# 🎨 PLANTILLA HTML "CAVIAR"
 # ==============================================================================
 PLANTILLA_HTML_BASE = """<!DOCTYPE html>
 <html lang="ca">
@@ -239,33 +240,49 @@ def generar_oferta_multi_model(categoria):
     for model in MODELS_RODA:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GOOGLE_API_KEY}"
         try:
+            # Posa una pausa per no saturar
+            time.sleep(2)
             res = requests.post(url, headers=headers, json=data)
-            if res.status_code == 200:
-                text_brut = res.json()['candidates'][0]['content']['parts'][0]['text'].strip()
-                linia_bona = ""
-                for linia in text_brut.split("\n"):
-                    if "|" in linia:
-                        linia_bona = linia
-                        break
-                if linia_bona:
-                    parts = linia_bona.split("|")
-                    nom = netejar_text(parts[0]) 
-                    clau = parts[1].strip()
-                    if len(nom) > 60 or len(nom) < 3: return None
+            
+            # --- ZONA DEBUG (XIVATO) ---
+            if res.status_code != 200:
+                print(f"⚠️ Error al model {model}: {res.status_code}")
+                # Si falla, salta al següent model de la llista
+                continue 
+            
+            # Si estem aquí, ha funcionat (codi 200)
+            text_brut = res.json()['candidates'][0]['content']['parts'][0]['text'].strip()
+            
+            # Imprimim què ens diu Google per veure si es queixa
+            print(f"🤖 El cervell {model} diu: {text_brut[:40]}...")
 
-                    nom_safe = urllib.parse.quote(nom)
-                    if es_amazon:
-                        link = f"https://www.amazon.es/s?k={nom_safe}&tag={AMAZON_TAG}"
-                    else:
-                        target = f"https://www.aliexpress.com/wholesale?SearchText={nom_safe}"
-                        link = f"https://s.click.aliexpress.com/deep_link.htm?aff_short_key={ALI_CODE}&dl_target_url={urllib.parse.quote(target)}"
+            linia_bona = ""
+            for linia in text_brut.split("\n"):
+                if "|" in linia:
+                    linia_bona = linia
+                    break
+            
+            if linia_bona:
+                parts = linia_bona.split("|")
+                nom = netejar_text(parts[0]) 
+                clau = parts[1].strip()
+                if len(nom) > 60 or len(nom) < 3: return None
 
-                    prompt_img = urllib.parse.quote(f"{nom} product, clean white background, high tech, 4k")
-                    img = f"https://image.pollinations.ai/prompt/{prompt_img}?width=400&height=400&nologo=true&seed={random.randint(1,999)}"
-                    rating = round(random.uniform(4.5, 5.0), 1)
+                nom_safe = urllib.parse.quote(nom)
+                if es_amazon:
+                    link = f"https://www.amazon.es/s?k={nom_safe}&tag={AMAZON_TAG}"
+                else:
+                    target = f"https://www.aliexpress.com/wholesale?SearchText={nom_safe}"
+                    link = f"https://s.click.aliexpress.com/deep_link.htm?aff_short_key={ALI_CODE}&dl_target_url={urllib.parse.quote(target)}"
 
-                    return {"Nom Producte": nom, "Dada Clau": clau, "Enllac Compra": link, "Imatge": img, "Valid": "Si", "Tienda": tienda, "Rating": rating}
-        except: continue
+                prompt_img = urllib.parse.quote(f"{nom} product, clean white background, high tech, 4k")
+                img = f"https://image.pollinations.ai/prompt/{prompt_img}?width=400&height=400&nologo=true&seed={random.randint(1,999)}"
+                rating = round(random.uniform(4.5, 5.0), 1)
+
+                return {"Nom Producte": nom, "Dada Clau": clau, "Enllac Compra": link, "Imatge": img, "Valid": "Si", "Tienda": tienda, "Rating": rating}
+        except Exception as e:
+            print(f"❌ Error tècnic amb {model}: {e}")
+            continue
     return None
 
 def regenerar_web():
@@ -286,25 +303,24 @@ def regenerar_web():
         </div>
         """
     
-    # --- LA CORRECCIÓ CLAU ÉS AQUÍ ---
     html_final = PLANTILLA_HTML_BASE.format(
         grid_items=items_html,
         AMAZON_TAG=AMAZON_TAG,
         ALI_CODE=ALI_CODE
     )
-    # ---------------------------------
 
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_final)
     
     try:
-        print("   ☁️ Actualitzant Cloudflare...")
+        # Aquesta part es per si tenim Git actiu, sino no fara res dolent
+        print("   ☁️ Intentant actualitzar núvol...")
         os.system("git add .")
         os.system('git commit -m "Neteja i update"')
         os.system("git push")
     except: pass
 
-print("🧹 ROBOT V9.4 (BUG FIX): Regenerant web...")
+print("🧹 ROBOT V10 (NADAL FIX): Regenerant web...")
 regenerar_web()
 print("✅ Web regenerada amb Èxit!")
 print("🦉 Iniciant torn de vigilància...")
@@ -316,4 +332,9 @@ while True:
         if oferta: 
             guardar_producte(oferta)
             regenerar_web()
-        time.sleep(random.randint(MIN_WAIT, MAX_WAIT))
+        else:
+            print("⚠️ No s'ha trobat cap oferta vàlida.")
+        
+        temps_espera = random.randint(MIN_WAIT, MAX_WAIT)
+        print(f"⏳ Esperant {temps_espera} segons...")
+        time.sleep(temps_espera)
