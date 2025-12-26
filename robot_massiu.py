@@ -42,7 +42,7 @@ CATEGORIES = [
     "Proyectores 4k 8k", "Pulseras de actividad deportivas", "estacion energia portatil",
     "Ropa ciclismo maillot culotte", "Cafeteras express", "exoesqueleto",
     "Sistemas almacenamiento NAS", "Discos duros server 4TB 8TB 16TB 24TB 32TB",
-    "Impresoras 3D ", "Drones con camara 8k", "Smart Home", " DOMOTICA", "ANILLO ACTIVIDAD DEPOTIVA"
+    "Impresoras 3D ", "Drones con camara 8k", "Smart Home", " DOMOTICA", "ANILLO ACTIVIDAD DEPORTIVA"
 ]
 
 FITXER_CSV = "base_dades_final.csv"
